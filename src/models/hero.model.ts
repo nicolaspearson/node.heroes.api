@@ -14,15 +14,15 @@ import {
 	UpdateDateColumn
 } from 'typeorm';
 
-@Entity({ name: 'receipt' })
-export class Receipt {
+@Entity({ name: 'hero' })
+export class Hero {
 	@PrimaryGeneratedColumn()
 	public id: number;
 
 	@Column({ name: 'uuid', length: 50 })
 	@Length(1, 50, {
 		message: (args: ValidationArguments) => {
-			return Receipt.getGenericValidationLengthMessage(args);
+			return Hero.getGenericValidationLengthMessage(args);
 		}
 	})
 	public uuid: string;
@@ -34,7 +34,7 @@ export class Receipt {
 	@Column({ name: 'vendor', length: 500 })
 	@Length(1, 500, {
 		message: (args: ValidationArguments) => {
-			return Receipt.getGenericValidationLengthMessage(args);
+			return Hero.getGenericValidationLengthMessage(args);
 		}
 	})
 	public vendor: string;
@@ -43,8 +43,8 @@ export class Receipt {
 	@IsOptional()
 	public userId?: number;
 
-	@Column({ name: 'receipt_date', type: 'timestamp with time zone' })
-	public receiptDate: Date;
+	@Column({ name: 'hero_date', type: 'timestamp with time zone' })
+	public heroDate: Date;
 
 	@CreateDateColumn({ name: 'created_at', type: 'timestamp with time zone' })
 	public createdAt: Date;
@@ -55,18 +55,18 @@ export class Receipt {
 	@Column({ name: 'deleted_at', type: 'timestamp with time zone' })
 	public deletedAt: Date;
 
-	public static newReceipt(obj: {
+	public static newHero(obj: {
 		id?: number;
 		uuid?: string;
 		fileUrl?: string;
 		vendor?: string;
 		userId?: number;
-		receiptDate?: Date;
+		heroDate?: Date;
 		createdAt?: Date;
 		updatedAt?: Date;
 		deletedAt?: Date;
 	}) {
-		const newObject = new Receipt();
+		const newObject = new Hero();
 		if (obj.id) {
 			newObject.id = obj.id;
 		}
@@ -82,8 +82,8 @@ export class Receipt {
 		if (obj.userId) {
 			newObject.userId = obj.userId;
 		}
-		if (obj.receiptDate) {
-			newObject.receiptDate = obj.receiptDate;
+		if (obj.heroDate) {
+			newObject.heroDate = obj.heroDate;
 		}
 		if (obj.createdAt) {
 			newObject.createdAt = obj.createdAt;
@@ -118,7 +118,7 @@ export class Receipt {
 		}
 	}
 
-	public sanitize(): Receipt {
+	public sanitize(): Hero {
 		delete this.deletedAt;
 		return this;
 	}
