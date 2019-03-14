@@ -10,3 +10,5 @@ logs/*.log
 
 # Database
 /hero-db/data
+
+.DS_Store
