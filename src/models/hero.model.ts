@@ -1,11 +1,5 @@
 import Boom from 'boom';
-import {
-	IsOptional,
-	Length,
-	validate,
-	ValidationArguments,
-	ValidationError
-} from 'class-validator';
+import { Length, validate, ValidationArguments, ValidationError } from 'class-validator';
 import {
 	Column,
 	CreateDateColumn,
@@ -19,32 +13,32 @@ export class Hero {
 	@PrimaryGeneratedColumn()
 	public id: number;
 
-	@Column({ name: 'uuid', length: 50 })
-	@Length(1, 50, {
-		message: (args: ValidationArguments) => {
-			return Hero.getGenericValidationLengthMessage(args);
-		}
-	})
-	public uuid: string;
-
-	@Column({ name: 'file_url' })
-	@IsOptional()
-	public fileUrl?: string;
-
-	@Column({ name: 'vendor', length: 500 })
+	@Column({ name: 'name', length: 500 })
 	@Length(1, 500, {
 		message: (args: ValidationArguments) => {
 			return Hero.getGenericValidationLengthMessage(args);
 		}
 	})
-	public vendor: string;
+	public name: string;
 
-	@Column({ name: 'user_id' })
-	@IsOptional()
-	public userId?: number;
+	@Column({ name: 'identity', length: 500 })
+	@Length(1, 500, {
+		message: (args: ValidationArguments) => {
+			return Hero.getGenericValidationLengthMessage(args);
+		}
+	})
+	public identity: string;
 
-	@Column({ name: 'hero_date', type: 'timestamp with time zone' })
-	public heroDate: Date;
+	@Column({ name: 'hometown', length: 500 })
+	@Length(1, 500, {
+		message: (args: ValidationArguments) => {
+			return Hero.getGenericValidationLengthMessage(args);
+		}
+	})
+	public hometown: string;
+
+	@Column({ name: 'age' })
+	public age: number;
 
 	@CreateDateColumn({ name: 'created_at', type: 'timestamp with time zone' })
 	public createdAt: Date;
@@ -57,44 +51,43 @@ export class Hero {
 
 	public static newHero(obj: {
 		id?: number;
-		uuid?: string;
-		fileUrl?: string;
-		vendor?: string;
-		userId?: number;
-		heroDate?: Date;
+		name?: string;
+		identity?: string;
+		hometown?: string;
+		age?: number;
 		createdAt?: Date;
 		updatedAt?: Date;
 		deletedAt?: Date;
 	}) {
-		const newObject = new Hero();
-		if (obj.id) {
-			newObject.id = obj.id;
-		}
-		if (obj.uuid) {
-			newObject.uuid = obj.uuid;
-		}
-		if (obj.fileUrl) {
-			newObject.fileUrl = obj.fileUrl;
-		}
-		if (obj.vendor) {
-			newObject.vendor = obj.vendor;
-		}
-		if (obj.userId) {
-			newObject.userId = obj.userId;
-		}
-		if (obj.heroDate) {
-			newObject.heroDate = obj.heroDate;
-		}
-		if (obj.createdAt) {
-			newObject.createdAt = obj.createdAt;
-		}
-		if (obj.updatedAt) {
-			newObject.updatedAt = obj.updatedAt;
-		}
-		if (obj.deletedAt) {
-			newObject.deletedAt = obj.deletedAt;
-		}
-		return newObject;
+		return { ...new Hero(), ...obj };
+		// if (obj.id) {
+		// 	newObject.id = obj.id;
+		// }
+		// if (obj.name) {
+		// 	newObject.name = obj.name;
+		// }
+		// if (obj.fileUrl) {
+		// 	newObject.fileUrl = obj.fileUrl;
+		// }
+		// if (obj.vendor) {
+		// 	newObject.vendor = obj.vendor;
+		// }
+		// if (obj.userId) {
+		// 	newObject.userId = obj.userId;
+		// }
+		// if (obj.heroDate) {
+		// 	newObject.heroDate = obj.heroDate;
+		// }
+		// if (obj.createdAt) {
+		// 	newObject.createdAt = obj.createdAt;
+		// }
+		// if (obj.updatedAt) {
+		// 	newObject.updatedAt = obj.updatedAt;
+		// }
+		// if (obj.deletedAt) {
+		// 	newObject.deletedAt = obj.deletedAt;
+		// }
+		// return newObject;
 	}
 
 	public static validId(id: number): boolean {

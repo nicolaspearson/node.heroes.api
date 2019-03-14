@@ -1,7 +1,5 @@
 import Boom from 'boom';
-import * as fs from 'fs';
 import Hapi from 'hapi';
-import * as path from 'path';
 
 import AppLogger from '@logger/app.logger';
 import { Hero } from '@models/hero.model';
@@ -10,7 +8,6 @@ import HeroService from '@services/hero.service';
 
 export default class HeroActions {
 	private static instance: HeroActions;
-	// Create the hero repository and service
 	private static heroRepository: HeroRepository;
 	private static heroService: HeroService;
 
@@ -30,62 +27,96 @@ export default class HeroActions {
 		return this.instance;
 	}
 
-	public async heroHero(request: Hapi.Request): Promise<{}> {
+	public async getHero(request: Hapi.Request): Promise<Hero> {
 		const payload: any = request.payload;
-		if (!payload || !payload.file || !payload.uuid) {
+		if (!payload) {
+			throw Boom.badRequest('Incorrect / invalid parameters supplied');
+		}
+		let id: number;
+		try {
+			id = parseInt(request.query instanceof Array ? request.query[0] : request.query.id, 10);
+			if (id < 1) {
+				throw new Error('Invalid Id');
+			}
+		} catch (error) {
+			throw Boom.badRequest('Incorrect / invalid parameters supplied');
+		}
+		return await HeroActions.heroService.findOneById(id);
+	}
+
+	public async getHeroes(request: Hapi.Request): Promise<Hero[]> {
+		return await HeroActions.heroService.findAll();
+	}
+
+	public async createHero(request: Hapi.Request): Promise<Hero> {
+		const payload: any = request.payload;
+		if (!payload) {
 			throw Boom.badRequest('Incorrect / invalid parameters supplied');
 		}
 
-		const file: any = payload.file;
-		let filename: string = `${payload.uuid}`;
-		if (file && file.hapi && file.hapi.filename) {
-			const parts: string[] = file.hapi.filename.split('.');
-			const extension = parts && parts.length > 1 ? '.' + parts[parts.length - 1] : '';
-			filename = `${filename}${extension}`;
-		}
-		AppLogger.logger.debug(`Saving Hero: ${filename}`);
+		AppLogger.logger.debug(`Saving Hero: ${request.payload}`);
 
-		let hero: Hero;
-		let foundHero: boolean = false;
+		let hero: Hero | undefined;
 		try {
 			hero = await HeroActions.heroService.findOneByFilter({
 				where: {
-					uuid: payload.uuid
+					uuid: payload.name
 				}
 			});
 			AppLogger.logger.debug(`Found Existing Hero: ${JSON.stringify(hero)}`);
-			foundHero = true;
 		} catch (error) {
-			// We were unable to find an existing hero,
-			// let's create one with the info we have
-			hero = Hero.newHero({
-				uuid: payload.uuid,
-				vendor: 'Unknown',
-				heroDate: new Date()
-			});
+			// We were unable to find an existing hero, continue...
 		}
 
-		return new Promise((resolve, reject) => {
-			const data = file._data;
-			const filePath = path.resolve('heros', filename);
-			fs.writeFile(filePath, data, async err => {
-				if (err) {
-					reject(err);
-				}
-				const fileUrl = `/heros/${filename}`;
-				hero.fileUrl = fileUrl;
-				try {
-					let newHero: Hero;
-					if (!foundHero) {
-						newHero = await HeroActions.heroService.save(hero);
-					} else {
-						newHero = await HeroActions.heroService.update(hero, hero.id);
-					}
-					resolve(newHero);
-				} catch (error) {
-					reject(error);
-				}
-			});
+		if (!hero) {
+			return await HeroActions.heroService.save(payload);
+		} else {
+			return await HeroActions.heroService.update(payload, hero.id);
+		}
+	}
+
+	public async updateHero(request: Hapi.Request): Promise<Hero> {
+		const payload: any = request.payload;
+		if (!payload || !request.params.id) {
+			throw Boom.badRequest('Incorrect / invalid parameters supplied');
+		}
+
+		let id: number;
+		try {
+			id = parseInt(request.params.id, 10);
+			if (id < 1) {
+				throw new Error('Invalid Id');
+			}
+		} catch (error) {
+			throw Boom.badRequest('Incorrect / invalid parameters supplied');
+		}
+
+		// Ensure the record exists
+		await HeroActions.heroService.findOneByFilter({
+			where: {
+				id
+			}
 		});
+		return await HeroActions.heroService.update(payload, id);
+	}
+
+	public async deleteHero(request: Hapi.Request): Promise<Hero> {
+		let id: number;
+		try {
+			id = parseInt(request.params.id, 10);
+			if (id < 1) {
+				throw new Error('Invalid Id');
+			}
+		} catch (error) {
+			throw Boom.badRequest('Incorrect / invalid parameters supplied');
+		}
+
+		// Ensure the record exists
+		await HeroActions.heroService.findOneByFilter({
+			where: {
+				id
+			}
+		});
+		return await HeroActions.heroService.softDelete(id);
 	}
 }
