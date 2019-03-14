@@ -1,0 +1,64 @@
+{
+	"name": "node.heroes.api",
+	"version": "0.0.1",
+	"description": "Node Heroes API",
+	"main": "dist",
+	"author": "Nicolas Pearson",
+	"repository": {
+		"type": "git"
+	},
+	"license": "MIT",
+	"scripts": {
+		"start": "npm run build && npm run watch",
+		"build": "rm -rf ./dist && npm run build:ts && npm run tslint && npm run copy:env",
+		"build:ts": "tsc --rootDir ./src/",
+		"debug": "npm run build && npm run watch:debug",
+		"serve": "nodemon dist/index.js",
+		"serve:debug": "nodemon --inspect=5858 dist/index.js",
+		"watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run watch:ts\" \"npm run serve\"",
+		"watch:debug": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run watch:ts\" \"npm run serve:debug\"",
+		"watch:ts": "tsc -w",
+		"tslint": "tslint --fix -c tslint.json -p tsconfig.json",
+		"clean": "rm -rf node_modules && npm install",
+		"copy:env": "cp ./src/env/*.json ./dist/env/"
+	},
+	"dependencies": {
+		"blipp": "~3.1.2",
+		"boom": "~7.3.0",
+		"class-validator": "~0.9.1",
+		"good": "~8.1.2",
+		"good-console": "~8.0.0",
+		"good-squeeze": "~5.1.0",
+		"hapi": "~18.1.0",
+		"module-alias": "~2.2.0",
+		"nconf": "~0.10.0",
+		"pg": "~7.8.2",
+		"reflect-metadata": "~0.1.13",
+		"typeorm": "~0.2.15",
+		"typeorm-infrastructure": "~1.0.7",
+		"winston": "~3.2.1",
+		"wurst": "~4.0.1"
+	},
+	"devDependencies": {
+		"@types/boom": "~7.2.1",
+		"@types/hapi": "~18.0.1",
+		"@types/nconf": "~0.10.0",
+		"@types/node": "~11.11.3",
+		"concurrently": "~4.1.0",
+		"dotenv": "~7.0.0",
+		"nodemon": "~1.18.10",
+		"ts-node": "~8.0.3",
+		"tslint": "~5.14.0",
+		"typescript": "~3.3.3333"
+	},
+	"_moduleAliases": {
+		"@actions": "dist/actions",
+		"@db": "dist/db",
+		"@env": "dist/env/index",
+		"@logger": "dist/logger",
+		"@models": "dist/models",
+		"@repositories": "dist/repositories",
+		"@services": "dist/services",
+		"@utils": "dist/utils"
+	}
+}

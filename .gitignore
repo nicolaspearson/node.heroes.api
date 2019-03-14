@@ -1,0 +1,12 @@
+# Generated files
+build/
+dist/
+
+# Node files
+node_modules/
+
+# Log files
+logs/*.log
+
+# Database
+/hero-db/data
