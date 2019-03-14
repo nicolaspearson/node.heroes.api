@@ -35,7 +35,7 @@ The app will start running at <http://localhost:8000>
 ```bash
 npm install -g http-server
 npm run build
-http-server ./build
+http-server -p 8000 ./build
 ```
 
 The app will start running at <http://localhost:8000>
@@ -62,8 +62,10 @@ DELETE /hero/{heroId}
 
 ## Benchmarking
 
-Run the following to benchmark request performance:
+Run this command to benchmark request performance:
 
 ```
 wrk -d1m http://localhost:8000/heroes
 ```
+
+![benchmark](/img/benchmark.png)
