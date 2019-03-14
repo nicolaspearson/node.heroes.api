@@ -28,10 +28,6 @@ export default class HeroActions {
 	}
 
 	public async getHero(request: Hapi.Request): Promise<Hero> {
-		const payload: any = request.payload;
-		if (!payload) {
-			throw Boom.badRequest('Incorrect / invalid parameters supplied');
-		}
 		let id: number;
 		try {
 			id = parseInt(request.query instanceof Array ? request.query[0] : request.query.id, 10);
@@ -117,6 +113,6 @@ export default class HeroActions {
 				id
 			}
 		});
-		return await HeroActions.heroService.softDelete(id);
+		return await HeroActions.heroService.delete(id);
 	}
 }

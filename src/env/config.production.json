@@ -7,7 +7,7 @@
 	"DB_NAME": "hero",
 	"DB_LOGGING": false,
 	"DB_CONNECTION_NAME": "default",
-	"DB_SCHEMA": "hero",
+	"DB_SCHEMA": "public",
 	"DB_PASSWORD": "masterkey",
 	"DB_USERNAME": "master"
 }
