@@ -23,7 +23,6 @@ export interface IServerConfigurations {
 	DB_SCHEMA: string;
 	DB_PASSWORD: string;
 	DB_USERNAME: string;
-	ROUTE_PREFIX: string;
 }
 
 export function getServerConfig(): IServerConfigurations {

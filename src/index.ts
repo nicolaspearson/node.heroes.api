@@ -51,21 +51,14 @@ async function start(): Promise<Hapi.Server> {
 	});
 
 	// Auto route discovery
-	await server.register(
-		{
-			plugin: require('wurst'),
-			options: {
-				routes: '*.routes.js',
-				cwd: path.join(__dirname, 'routes'),
-				log: false
-			}
-		},
-		{
-			routes: {
-				prefix: config.getServerConfig().ROUTE_PREFIX
-			}
+	await server.register({
+		plugin: require('wurst'),
+		options: {
+			routes: '*.routes.js',
+			cwd: path.join(__dirname, 'routes'),
+			log: false
 		}
-	);
+	});
 
 	// Route table console output
 	await server.register(Blipp);

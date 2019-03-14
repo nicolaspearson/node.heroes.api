@@ -9,6 +9,5 @@
 	"DB_CONNECTION_NAME": "default",
 	"DB_SCHEMA": "hero",
 	"DB_PASSWORD": "masterkey",
-	"DB_USERNAME": "master",
-	"ROUTE_PREFIX": ""
+	"DB_USERNAME": "master"
 }
