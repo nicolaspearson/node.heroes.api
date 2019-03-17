@@ -60,34 +60,6 @@ export class Hero {
 		deletedAt?: Date;
 	}) {
 		return { ...new Hero(), ...obj };
-		// if (obj.id) {
-		// 	newObject.id = obj.id;
-		// }
-		// if (obj.name) {
-		// 	newObject.name = obj.name;
-		// }
-		// if (obj.fileUrl) {
-		// 	newObject.fileUrl = obj.fileUrl;
-		// }
-		// if (obj.vendor) {
-		// 	newObject.vendor = obj.vendor;
-		// }
-		// if (obj.userId) {
-		// 	newObject.userId = obj.userId;
-		// }
-		// if (obj.heroDate) {
-		// 	newObject.heroDate = obj.heroDate;
-		// }
-		// if (obj.createdAt) {
-		// 	newObject.createdAt = obj.createdAt;
-		// }
-		// if (obj.updatedAt) {
-		// 	newObject.updatedAt = obj.updatedAt;
-		// }
-		// if (obj.deletedAt) {
-		// 	newObject.deletedAt = obj.deletedAt;
-		// }
-		// return newObject;
 	}
 
 	public static validId(id: number): boolean {

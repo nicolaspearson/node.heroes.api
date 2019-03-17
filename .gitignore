@@ -8,7 +8,11 @@ node_modules/
 # Log files
 logs/*.log
 
-# Database
+# Database files
 /hero-db/data
 
+# OS Files
 .DS_Store
+
+# Environment
+.env

@@ -2,6 +2,7 @@ import 'module-alias/register';
 import 'reflect-metadata';
 
 import * as Blipp from 'blipp';
+import * as dotenv from 'dotenv';
 import Hapi from 'hapi';
 import * as path from 'path';
 
@@ -11,6 +12,7 @@ import AppLogger from '@logger/app.logger';
 import { SystemUtils } from '@utils/system.utils';
 
 // Setup environment config
+dotenv.config();
 config.init();
 
 async function init() {
@@ -45,7 +47,7 @@ async function start(): Promise<Hapi.Server> {
 		routes: {
 			cors: {
 				additionalHeaders: ['x-access-token'],
-				origin: ['http://localhost:3000']
+				origin: ['*']
 			}
 		}
 	});

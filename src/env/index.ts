@@ -4,6 +4,8 @@ import * as path from 'path';
 export function init() {
 	nconf.argv().env();
 	const environment = nconf.get('NODE_ENV') || 'development';
+	// tslint:disable-next-line
+	console.log('API: ' + nconf.get('API_HOST'));
 	nconf.file(environment, path.resolve(`dist/env/config.${environment.toLowerCase()}.json`));
 	nconf.file('default', path.resolve(`dist/env/config.default.json`));
 }
