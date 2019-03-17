@@ -11,6 +11,7 @@ export default class HeroService extends BaseService<Hero> {
 
 	public preSaveHook(hero: Hero): void {
 		// Executed before the save repository call
+		delete hero.id;
 	}
 
 	public preUpdateHook(hero: Hero) {

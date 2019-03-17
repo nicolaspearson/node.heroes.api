@@ -50,13 +50,13 @@ export default class HeroActions {
 			throw Boom.badRequest('Incorrect / invalid parameters supplied');
 		}
 
-		AppLogger.logger.debug(`Saving Hero: ${request.payload}`);
+		AppLogger.logger.debug(`Saving Hero: ${JSON.stringify(request.payload)}`);
 
 		let hero: Hero | undefined;
 		try {
 			hero = await HeroActions.heroService.findOneByFilter({
 				where: {
-					uuid: payload.name
+					name: payload.name
 				}
 			});
 			AppLogger.logger.debug(`Found Existing Hero: ${JSON.stringify(hero)}`);
