@@ -1,6 +1,7 @@
 {
 	"defaultSeverity": "error",
 	"extends": ["tslint:recommended"],
+	"jsRules": {},
 	"rules": {
 		"class-name": true,
 		"comment-format": [true, "check-space"],
@@ -47,6 +48,8 @@
 		"jsdoc-format": true,
 		"arrow-parens": false,
 		"await-promise": true,
-		"ordered-imports": true
+		"ordered-imports": true,
+		"interface-name": false,
+		"forin": false
 	}
 }

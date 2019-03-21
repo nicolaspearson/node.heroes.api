@@ -15,7 +15,7 @@ import { SystemUtils } from '@utils/system.utils';
 dotenv.config();
 config.init();
 
-async function init() {
+export async function init() {
 	// Setup the logger
 	const appLogger = new AppLogger();
 	appLogger.setupAppLogger();
@@ -33,7 +33,7 @@ async function init() {
 	}
 }
 
-async function start(): Promise<Hapi.Server> {
+export async function start(): Promise<Hapi.Server> {
 	await init();
 
 	const host: any = config.getServerConfig().API_HOST;
