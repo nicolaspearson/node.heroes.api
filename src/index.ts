@@ -15,6 +15,8 @@ import * as SystemUtils from '@utils/system.utils';
 dotenv.config();
 config.init();
 
+const isTestEnv = process.env.NODE_ENV === 'test';
+
 async function init() {
 	// Setup the logger
 	const appLogger = new AppLogger();
@@ -34,13 +36,11 @@ async function init() {
 }
 
 async function start(): Promise<Hapi.Server> {
-	await init();
-
 	const host: any = config.getServerConfig().API_HOST;
 	const port: any = config.getServerConfig().API_PORT;
 
 	// Create the Hapi server
-	const server: Hapi.Server = new Hapi.Server({
+	const hapiServer: Hapi.Server = new Hapi.Server({
 		port,
 		host,
 		debug: { request: ['error'] },
@@ -53,20 +53,20 @@ async function start(): Promise<Hapi.Server> {
 	});
 
 	// Auto route discovery
-	await server.register({
+	await hapiServer.register({
 		plugin: require('wurst'),
 		options: {
-			routes: '*.routes.js',
+			routes: !isTestEnv ? '*.routes.js' : '*.routes.ts',
 			cwd: path.join(__dirname, 'routes'),
 			log: false
 		}
 	});
 
 	// Route table console output
-	await server.register(Blipp);
+	await hapiServer.register(Blipp);
 
 	// Enriched console output
-	await server.register({
+	await hapiServer.register({
 		plugin: require('good'),
 		options: {
 			reporters: {
@@ -92,14 +92,20 @@ async function start(): Promise<Hapi.Server> {
 		}
 	});
 
-	await server.start();
-	return server;
+	if (!isTestEnv) {
+		await hapiServer.start();
+	}
+
+	AppLogger.logger.debug(`Server running at: ${hapiServer.info.uri}`);
+	return hapiServer;
 }
 
-start()
-	.then(server => {
-		AppLogger.logger.debug(`Server running at: ${server.info.uri}`);
-	})
-	.catch(error => {
+export const server = (async () => {
+	try {
+		await init();
+		return await start();
+	} catch (error) {
 		AppLogger.logger.error(`Server failed: ${JSON.stringify(error)}`);
-	});
+		throw error;
+	}
+})();

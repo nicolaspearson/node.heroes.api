@@ -6,8 +6,8 @@ describe('Index Tests', () => {
 		const time: number = new Date().getTime();
 		await SystemUtils.sleep(1000);
 		const diff = new Date().getTime() - time;
-		expect(diff).toBeGreaterThan(1000);
-		expect(diff).toBeLessThan(1250);
+		expect(diff).toBeGreaterThanOrEqual(1000);
+		expect(diff).toBeLessThanOrEqual(1250);
 		done();
 	});
 });
