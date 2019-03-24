@@ -17,6 +17,18 @@ module.exports = {
 	// An array of file extensions your modules use
 	moduleFileExtensions: ['ts', 'js', 'json', 'node'],
 
+	// Map aliases
+	moduleNameMapper: {
+		'^@actions(.*)$': '<rootDir>/src/actions$1',
+		'^@db(.*)$': '<rootDir>/src/db$1',
+		'^@env(.*)$': '<rootDir>/src/env$1',
+		'^@logger(.*)$': '<rootDir>/src/logger$1',
+		'^@models(.*)$': '<rootDir>/src/models$1',
+		'^@repositories(.*)$': '<rootDir>/src/repositories$1',
+		'^@services(.*)$': '<rootDir>/src/services$1',
+		'^@utils(.*)$': '<rootDir>/src/utils$1'
+	},
+
 	// The root directories
 	roots: ['<rootDir>/src', '<rootDir>/test'],
 

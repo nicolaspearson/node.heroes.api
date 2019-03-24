@@ -9,13 +9,13 @@ import * as path from 'path';
 import { Database } from '@db/app.db';
 import * as config from '@env';
 import AppLogger from '@logger/app.logger';
-import { SystemUtils } from '@utils/system.utils';
+import * as SystemUtils from '@utils/system.utils';
 
 // Setup environment config
 dotenv.config();
 config.init();
 
-export async function init() {
+async function init() {
 	// Setup the logger
 	const appLogger = new AppLogger();
 	appLogger.setupAppLogger();
@@ -33,7 +33,7 @@ export async function init() {
 	}
 }
 
-export async function start(): Promise<Hapi.Server> {
+async function start(): Promise<Hapi.Server> {
 	await init();
 
 	const host: any = config.getServerConfig().API_HOST;
