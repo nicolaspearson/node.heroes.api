@@ -23,4 +23,24 @@ describe('Hero API Integration Tests', () => {
 				.expect(200, done);
 		});
 	});
+
+	describe('#GET /hero', () => {
+		it('should get the hero with an id of 1', done => {
+			request(app.listener)
+				.get('/hero?id=1')
+				.set('Accept', 'application/json')
+				.expect('Content-Type', /json/)
+				.expect(200, done);
+		});
+	});
+
+	describe('#GET /hero', () => {
+		it('should fail to find a hero with an id of 1001', done => {
+			request(app.listener)
+				.get('/hero?id=1001')
+				.set('Accept', 'application/json')
+				.expect('Content-Type', /json/)
+				.expect(404, done);
+		});
+	});
 });
