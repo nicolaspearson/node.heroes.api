@@ -49,16 +49,7 @@ export class Hero {
 	@Column({ name: 'deleted_at', type: 'timestamp with time zone' })
 	public deletedAt: Date;
 
-	public static newHero(obj: {
-		id?: number;
-		name?: string;
-		identity?: string;
-		hometown?: string;
-		age?: number;
-		createdAt?: Date;
-		updatedAt?: Date;
-		deletedAt?: Date;
-	}) {
+	public static newHero(obj: {}) {
 		return { ...new Hero(), ...obj };
 	}
 

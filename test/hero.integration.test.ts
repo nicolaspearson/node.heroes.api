@@ -1,6 +1,7 @@
 import Hapi from 'hapi';
 import request from 'supertest';
 
+import { Hero } from '../src/models/hero.model';
 import { server } from '../src/index';
 
 describe('Hero API Integration Tests', () => {
@@ -46,22 +47,6 @@ describe('Hero API Integration Tests', () => {
 		});
 	});
 
-	describe('#GET /hero', () => {
-		it('should fail to find a hero with an id of 1001', done => {
-			request(app.listener)
-				.get('/hero?id=1001')
-				.set('Accept', 'application/json')
-				.expect('Content-Type', /json/)
-				.expect(404)
-				.end(err => {
-					if (err) {
-						return done(err);
-					}
-					done();
-				});
-		});
-	});
-
 	describe('#POST /hero', () => {
 		it('should create a hero', done => {
 			const hero = {
@@ -76,6 +61,49 @@ describe('Hero API Integration Tests', () => {
 				.set('Accept', 'application/json')
 				.expect('Content-Type', /json/)
 				.expect(200)
+				.expect(res => {
+					expect(res.body).toBeDefined();
+					const newHero = Hero.newHero(res.body);
+					expect(newHero).toBeDefined();
+					expect(newHero.name).toEqual(hero.name);
+					expect(newHero.identity).toEqual(hero.identity);
+					expect(newHero.hometown).toEqual(hero.hometown);
+					expect(newHero.age).toEqual(hero.age);
+				})
+				.end(err => {
+					if (err) {
+						return done(err);
+					}
+					done();
+				});
+		});
+	});
+
+	describe('#PUT /hero', () => {
+		it('should create a hero', done => {
+			const hero = {
+				id: 1,
+				name: 'Hawkeye',
+				identity: 'Clint Barton',
+				hometown: 'Portland',
+				age: 39
+			};
+			request(app.listener)
+				.put('/hero/1')
+				.send(hero)
+				.set('Accept', 'application/json')
+				.expect('Content-Type', /json/)
+				.expect(200)
+				.expect(res => {
+					expect(res.body).toBeDefined();
+					const updatedHero = Hero.newHero(res.body);
+					expect(updatedHero).toBeDefined();
+					expect(updatedHero.id).toEqual(hero.id);
+					expect(updatedHero.name).toEqual(hero.name);
+					expect(updatedHero.identity).toEqual(hero.identity);
+					expect(updatedHero.hometown).toEqual(hero.hometown);
+					expect(updatedHero.age).toEqual(hero.age);
+				})
 				.end(err => {
 					if (err) {
 						return done(err);
