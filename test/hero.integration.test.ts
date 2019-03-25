@@ -1,11 +1,13 @@
 import Hapi from 'hapi';
 import request from 'supertest';
 
-import { Hero } from '../src/models/hero.model';
 import { server } from '../src/index';
+import { Hero } from '../src/models/hero.model';
 
 describe('Hero API Integration Tests', () => {
 	let app: Hapi.Server;
+	let newHeroId: number | undefined;
+
 	describe('Init server', () => {
 		it('should init the server', async done => {
 			app = await server;
@@ -65,6 +67,7 @@ describe('Hero API Integration Tests', () => {
 					expect(res.body).toBeDefined();
 					const newHero = Hero.newHero(res.body);
 					expect(newHero).toBeDefined();
+					newHeroId = newHero.id;
 					expect(newHero.name).toEqual(hero.name);
 					expect(newHero.identity).toEqual(hero.identity);
 					expect(newHero.hometown).toEqual(hero.hometown);
@@ -82,14 +85,14 @@ describe('Hero API Integration Tests', () => {
 	describe('#PUT /hero', () => {
 		it('should create a hero', done => {
 			const hero = {
-				id: 1,
+				id: newHeroId || 1,
 				name: 'Hawkeye',
 				identity: 'Clint Barton',
 				hometown: 'Portland',
 				age: 39
 			};
 			request(app.listener)
-				.put('/hero/1')
+				.put(`/hero/${newHeroId || 1}`)
 				.send(hero)
 				.set('Accept', 'application/json')
 				.expect('Content-Type', /json/)
@@ -104,6 +107,22 @@ describe('Hero API Integration Tests', () => {
 					expect(updatedHero.hometown).toEqual(hero.hometown);
 					expect(updatedHero.age).toEqual(hero.age);
 				})
+				.end(err => {
+					if (err) {
+						return done(err);
+					}
+					done();
+				});
+		});
+	});
+
+	describe('#DELETE /hero', () => {
+		it(`should delete the hero with an id of ${newHeroId || 1}`, done => {
+			request(app.listener)
+				.delete(`/hero/${newHeroId || 1}`)
+				.set('Accept', 'application/json')
+				.expect('Content-Type', /json/)
+				.expect(200)
 				.end(err => {
 					if (err) {
 						return done(err);
