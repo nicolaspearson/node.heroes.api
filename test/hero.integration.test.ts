@@ -20,7 +20,13 @@ describe('Hero API Integration Tests', () => {
 				.get('/heroes')
 				.set('Accept', 'application/json')
 				.expect('Content-Type', /json/)
-				.expect(200, done);
+				.expect(200)
+				.end(err => {
+					if (err) {
+						return done(err);
+					}
+					done();
+				});
 		});
 	});
 
@@ -30,7 +36,13 @@ describe('Hero API Integration Tests', () => {
 				.get('/hero?id=1')
 				.set('Accept', 'application/json')
 				.expect('Content-Type', /json/)
-				.expect(200, done);
+				.expect(200)
+				.end(err => {
+					if (err) {
+						return done(err);
+					}
+					done();
+				});
 		});
 	});
 
@@ -40,7 +52,36 @@ describe('Hero API Integration Tests', () => {
 				.get('/hero?id=1001')
 				.set('Accept', 'application/json')
 				.expect('Content-Type', /json/)
-				.expect(404, done);
+				.expect(404)
+				.end(err => {
+					if (err) {
+						return done(err);
+					}
+					done();
+				});
+		});
+	});
+
+	describe('#POST /hero', () => {
+		it('should create a hero', done => {
+			const hero = {
+				name: 'The Hulk',
+				identity: 'Bruce Banner',
+				hometown: 'Chicago',
+				age: 43
+			};
+			request(app.listener)
+				.post('/hero')
+				.send(hero)
+				.set('Accept', 'application/json')
+				.expect('Content-Type', /json/)
+				.expect(200)
+				.end(err => {
+					if (err) {
+						return done(err);
+					}
+					done();
+				});
 		});
 	});
 });
